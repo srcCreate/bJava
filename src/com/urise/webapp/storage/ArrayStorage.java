@@ -1,18 +1,24 @@
+package com.urise.webapp.storage;
+
+import com.urise.webapp.model.Resume;
+
 import java.util.Arrays;
 
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
-    private Resume[] storage = new Resume[10000];
+public class ArrayStorage implements Storage {
+    private static final int STORAGE_LIMIT = 10000;
+
+    private Resume[] storage = new Resume[STORAGE_LIMIT];
     private int size = 0;
 
-    void clear() {
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
         size = 0;
-        Arrays.fill(storage, null);
     }
 
-    void update(Resume r) {
+    public void update(Resume r) {
         int index = getIndex(r.getUuid());
         if (index == -1) {
             System.out.println("ERROR: " + r.getUuid() + " резюме не существует.");
@@ -21,10 +27,10 @@ public class ArrayStorage {
         }
     }
 
-    void save(Resume r) {
+    public void save(Resume r) {
         if (getIndex(r.getUuid()) != -1) {
             System.out.println("ERROR: " + r.getUuid() + " резюме уже существует.");
-        } else if (size == storage.length) {
+        } else if (size == STORAGE_LIMIT) {
             System.out.println("ERROR: Storage overflow.");
         } else {
             storage[size] = r;
@@ -32,7 +38,7 @@ public class ArrayStorage {
         }
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index == -1) {
             System.out.println("ERROR: " + uuid + " резюме не найдено в хранилище.");
@@ -41,7 +47,7 @@ public class ArrayStorage {
         return storage[index];
     }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index == -1) {
             System.out.println("ERROR: " + uuid + " резюме не найдено в хранилище.");
@@ -62,18 +68,18 @@ public class ArrayStorage {
                 break;
             }
         }
-        Resume[] result = Arrays.copyOfRange(storage, target + 1, storage.length);
+        com.urise.webapp.model.Resume[] result = Arrays.copyOfRange(storage, target + 1, storage.length);
         System.arraycopy(result, 0, storage, target, result.length);
         storage[storage.length - 1] = null;*/
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
+    public Resume[] getAll() {
+        return Arrays.copyOfRange(storage, 0, size);
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 
