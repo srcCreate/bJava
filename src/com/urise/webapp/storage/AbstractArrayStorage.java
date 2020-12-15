@@ -10,11 +10,9 @@ import java.util.Arrays;
 /**
  * Array based storage for Resumes
  */
-public abstract class AbstractArrayStorage implements Storage {
-    protected static final int STORAGE_LIMIT = 10000;
+public abstract class AbstractArrayStorage extends AbstractStorage {
 
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
-    protected int size = 0;
 
     public int size() {
         return size;
@@ -26,42 +24,25 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void update(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(r.getUuid());
-        } else {
-            storage[index] = r;
-        }
+        checkForNotExist(r.getUuid());
+        doUpdate(r);
     }
 
     public void save(Resume r) {
-        int index = getIndex(r.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(r.getUuid());
-        } else if (size == STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", r.getUuid());
-        } else {
-            insertElement(r, index);
-            size++;
-        }
+        int index = checkForExist(r);
+        insertElement(r, index);
+        size++;
     }
 
     public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            fillDeletedElement(index);
-            storage[size - 1] = null;
-            size--;
-        }
+        int index = checkForNotExist(uuid);
+        fillDeletedElement(index);
+        storage[size - 1] = null;
+        size--;
     }
 
     public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index < 0) {
-            throw new NotExistStorageException(uuid);
-        }
+        int index = checkForNotExist(uuid);
         return storage[index];
     }
 
@@ -74,4 +55,9 @@ public abstract class AbstractArrayStorage implements Storage {
     protected abstract void fillDeletedElement(int index);
 
     protected abstract int getIndex(String uuid);
+
+    @Override
+    protected void doUpdate(Resume r) {
+        storage[getIndex(r.getUuid())] = r;
+    }
 }
