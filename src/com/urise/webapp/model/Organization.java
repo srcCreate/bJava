@@ -2,6 +2,7 @@ package com.urise.webapp.model;
 
 import com.urise.webapp.util.DateUtil;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -12,13 +13,15 @@ import java.util.Objects;
 import static com.urise.webapp.util.DateUtil.NOW;
 import static com.urise.webapp.util.DateUtil.of;
 
-public class Organization {
+public class Organization implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Link homePage;
 
     private List<Position> positions;
 
     public Organization(String name, String url, Position... positions) {
-        this(new Link(name,url), Arrays.asList(positions));
+        this(new Link(name, url), Arrays.asList(positions));
     }
 
     public Organization(Link homePage, List<Position> positions) {
@@ -46,7 +49,7 @@ public class Organization {
         return "Organization(" + homePage + ", " + positions + ")";
     }
 
-    public static class Position {
+    public static class Position implements Serializable {
         private final LocalDate startDate;
         private final LocalDate endDate;
         private final String title;
@@ -57,7 +60,7 @@ public class Organization {
         }
 
         public Position(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
-            this(of(startYear, startMonth), of(endYear,endMonth), title, description);
+            this(of(startYear, startMonth), of(endYear, endMonth), title, description);
         }
 
         public Position(LocalDate startDate, LocalDate endDate, String title, String description) {
