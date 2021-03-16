@@ -3,7 +3,6 @@ package com.urise.webapp.storage;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.*;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,6 +11,7 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractStorageTest {
@@ -138,15 +138,15 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAllSorted() {
         List<Resume> resumes = storage.getAllSorted();
-        Assert.assertEquals(3, resumes.size());
-        Assert.assertEquals(resumes, Arrays.asList(R1, R2, R3));
+        assertEquals(3, resumes.size());
+        assertEquals(resumes, Arrays.asList(R1, R2, R3));
     }
 
     private void assertSize(int size) {
-        Assert.assertEquals(size, storage.size());
+        assertEquals(size, storage.size());
     }
 
     private void assertGet(Resume r) {
-        Assert.assertEquals(r, storage.get(r.getUuid()));
+        assertEquals(r, storage.get(r.getUuid()));
     }
 }
