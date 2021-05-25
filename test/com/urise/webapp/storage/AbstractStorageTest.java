@@ -40,6 +40,7 @@ public abstract class AbstractStorageTest {
 
         R1.addContact(ContactType.EMAIL,"mail1@ya.ru");
         R1.addContact(ContactType.PHONE,"11111");
+
         R1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
         R1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
         R1.addSection(SectionType.ACHIEVEMENT, new ListSection("Achievement11", "Achievement12", "Achievement13"));
